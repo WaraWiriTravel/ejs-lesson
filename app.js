@@ -5,10 +5,16 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+const postingan = [];
+
 app.set("view engine", "ejs");
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", {
+    article: postingan
+  });
 });
 
 app.get("/about", (req, res) => {
@@ -21,6 +27,17 @@ app.get("/contact", (req, res) => {
 
 app.get("/compose", (req, res) => {
   res.render("compose");
+});
+
+app.post("/compose", (req, res) => {
+  const newPost = {
+    title: req.body.postTitle,
+    content: req.body.postBody,
+  }
+  postingan.push(newPost);
+  console.log(postingan);
+
+  res.redirect("/");
 });
 
 app.listen(3000, function () {
